@@ -4,14 +4,24 @@
 #include <wayland-server-core.h>
 #include <wlr/types/wlr_output.h>
 #include <wlr/types/wlr_output_damage.h>
+#include <wlr/util/box.h>
 
 #include "server.h"
 #include "view.h"
+
+/* There exist currently four layers:
+ * - ZWLR_LAYER_SHELL_V1_LAYER_BACKGROUND
+ * - ZWLR_LAYER_SHELL_V1_LAYER_BOTTOM
+ * - ZWLR_LAYER_SHELL_V1_LAYER_TOP
+ * - ZWLR_LAYER_SHELL_V1_LAYER_OVERLAY
+ */
+#define NUM_LAYERS 4
 
 struct cg_output {
 	struct cg_server *server;
 	struct wlr_output *wlr_output;
 	struct wlr_scene_output *scene_output;
+	struct wlr_box usable_area;
 
 	struct wl_listener commit;
 	struct wl_listener mode;
@@ -19,6 +29,7 @@ struct cg_output {
 	struct wl_listener frame;
 
 	struct wl_list link; // cg_server::outputs
+	struct wl_list layers[NUM_LAYERS]; // cg_layer_surface::link
 };
 
 void handle_output_manager_apply(struct wl_listener *listener, void *data);

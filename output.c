@@ -103,6 +103,7 @@ output_enable(struct cg_output *output)
 
 	wlr_output_enable(wlr_output, true);
 
+	output->usable_area = *wlr_output_layout_get_box(output->server->output_layout, wlr_output); // need to check #277
 	if (wlr_output_commit(wlr_output)) {
 		output_layout_add_auto(output);
 	}
@@ -323,6 +324,10 @@ handle_new_output(struct wl_listener *listener, void *data)
 	if (server->output_mode == CAGE_MULTI_OUTPUT_MODE_LAST && wl_list_length(&server->outputs) > 1) {
 		struct cg_output *next = wl_container_of(output->link.next, next, link);
 		output_disable(next);
+	}
+
+	for (size_t i = 0; i < sizeof(output->layers) / sizeof(output->layers[0]); i++) {
+		wl_list_init(&output->layers[i]);
 	}
 
 	if (!wlr_xcursor_manager_load(server->seat->xcursor_manager, wlr_output->scale)) {

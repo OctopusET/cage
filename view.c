@@ -85,15 +85,12 @@ view_center(struct cg_view *view, struct wlr_box *layout_box)
 }
 
 void
-view_position(struct cg_view *view)
+view_position(struct cg_view *view, struct wlr_box *geometry)
 {
-	struct wlr_box layout_box;
-	wlr_output_layout_get_box(view->server->output_layout, NULL, &layout_box);
-
-	if (view_is_primary(view) || view_extends_output_layout(view, &layout_box)) {
-		view_maximize(view, &layout_box);
+	if (view_is_primary(view) || view_extends_output_layout(view, geometry)) {
+		view_maximize(view, geometry);
 	} else {
-		view_center(view, &layout_box);
+		view_center(view, geometry);
 	}
 }
 
@@ -136,7 +133,8 @@ view_map(struct cg_view *view, struct wlr_surface *surface)
 	if (view->type != CAGE_XWAYLAND_VIEW || xwayland_view_should_manage(view))
 #endif
 	{
-		view_position(view);
+		struct wlr_box usable_area = {0};
+		view_position(view, &usable_area);
 	}
 
 	wl_list_insert(&view->server->views, &view->link);
