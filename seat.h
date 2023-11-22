@@ -27,7 +27,7 @@ struct cg_seat {
 
 	struct wlr_cursor *cursor;
 	struct wlr_xcursor_manager *xcursor_manager;
-	struct wl_listener cursor_motion;
+	struct wl_listener cursor_motion_relative;
 	struct wl_listener cursor_motion_absolute;
 	struct wl_listener cursor_button;
 	struct wl_listener cursor_axis;
@@ -91,5 +91,6 @@ struct cg_seat *seat_create(struct cg_server *server, struct wlr_backend *backen
 void seat_destroy(struct cg_seat *seat);
 struct cg_view *seat_get_focus(struct cg_seat *seat);
 void seat_set_focus(struct cg_seat *seat, struct cg_view *view);
+void seat_center_cursor(struct cg_seat *seat);
 
 #endif
