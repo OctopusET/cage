@@ -325,7 +325,7 @@ main(int argc, char *argv[])
 	wl_list_init(&server.views);
 	wl_list_init(&server.outputs);
 
-	server.output_layout = wlr_output_layout_create();
+	server.output_layout = wlr_output_layout_create(server.wl_display);
 	if (!server.output_layout) {
 		wlr_log(WLR_ERROR, "Unable to create output layout");
 		ret = 1;
@@ -596,6 +596,6 @@ end:
 	/* This function is not null-safe, but we only ever get here
 	   with a proper wl_display. */
 	wl_display_destroy(server.wl_display);
-	wlr_output_layout_destroy(server.output_layout);
+	wlr_output_layout_destroy(server.output_layout); //Is this still needed?
 	return ret;
 }
