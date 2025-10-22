@@ -478,7 +478,7 @@ main(int argc, char *argv[])
 		goto end;
 	}
 
-	server.layer_shell_v1 = wlr_layer_shell_v1_create(server.wl_display, 4);
+	server.layer_shell_v1 = wlr_layer_shell_v1_create(server.wl_display, 5);
 	if (!server.layer_shell_v1) {
 		wlr_log(WLR_ERROR, "Unable to create the layer shell");
 		ret = 1;
@@ -654,6 +654,7 @@ main(int argc, char *argv[])
 #endif
 	wl_list_remove(&server.new_virtual_pointer.link);
 	wl_list_remove(&server.new_virtual_keyboard.link);
+	wl_list_remove(&server.new_layer_shell_v1_surface.link);
 	wl_list_remove(&server.output_manager_apply.link);
 	wl_list_remove(&server.output_manager_test.link);
 	wl_list_remove(&server.xdg_toplevel_decoration.link);
